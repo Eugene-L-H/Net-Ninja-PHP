@@ -19,6 +19,12 @@
     .brand-text {
       background: #cbb09c !important;
     }
+
+    form {
+      max-width: 460px;
+      margin: 20px auto;
+      padding: 20px;
+    }
   </style>
 
 </head>

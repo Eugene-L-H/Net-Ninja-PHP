@@ -1,9 +1,15 @@
-<?php require('templates/header.php'); ?>
-
-<div>
-  <h1>Page Title</h1>
-</div>
-<p>Here is some content.</p>
+<?php
 
 
-<?php require('templates/footer.php'); ?>
+?>
+
+<!DOCTYPE html>
+<html>
+
+<?php include('templates/header.php'); ?>
+
+
+
+<?php include('templates/footer.php'); ?>
+
+</html>
