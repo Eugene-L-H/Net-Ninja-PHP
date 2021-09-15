@@ -1,5 +1,8 @@
 <?php
 
+include('templates/functions.php');
+include('config/db_connect.php');
+
 $errors = array('email' => '', 'title' => '', 'ingredients' => '');
 
 $email = '';
@@ -37,29 +40,28 @@ if (isset($_POST['submit'])) {
       $errors['ingredients'] = 'Ingredients must be a comma-seperated list.';
     }
   }
-}
 
-function errorMsg($arr, $type, $postData) {
+  if (!array_filter($errors)) {
+    // redirect if form submission contains no errors.
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+    $ingredients = mysqli_real_escape_string($conn, $_POST['ingredients']);
 
-  if (isset($postData['submit'])) {
+    // create sql
+    $sql = "INSERT INTO pizzas(email, title, ingredients) VALUES('$email', '$title', '$ingredients')";
 
-    if ($arr[$type] != '') {
-      echo '<span class="red-text">' . $arr[$type] . '</span><br>';
-    } else if (empty($postData[$type])) {
-      switch ($type) {
-        case 'email':
-          echo '<span class="red-text">' . 'An email is required' . '</span><br>';
-          break;
-        case 'title':
-          echo '<span class="red-text">' . 'Do you have a name for your pizza?' . '</span><br>';
-          break;
-        case 'ingredients':
-          echo '<span class="red-text">' . 'Be sure to add your toppings!' . '</span><br>';
-          break;
-      }
+    // save to db and check
+
+    if (mysqli_query($conn, $sql)) {
+      // success
+      header('Location: index.php');
+    } else {
+      //error
+      echo 'query error: ' . mysqli_error($conn);
     }
   }
-}
+} // end of post check
+
 
 ?>
 
@@ -92,7 +94,7 @@ function errorMsg($arr, $type, $postData) {
     errorMsg($errors, 'ingredients', $_POST);
     ?>
     <label for="">Ingredients (comma separated):</label>
-    <input type="text" name="ingredients" value="<?php echo htmlspecialchars($ingre)dients; ?>">
+    <input type="text" name="ingredients" value="<?php echo htmlspecialchars($ingredients); ?>">
 
     <div class="center">
       <input type="submit" name="submit" value="submit" class="btn brand z-depth-0">
